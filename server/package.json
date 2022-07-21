@@ -1,0 +1,23 @@
+{
+  "name": "simple_chat",
+  "version": "1.0.0",
+  "description": "Simple chat app with Flutter & Node Js",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/nhlhelen/Simple-chat-app-with-Flutter-Node-Js.git"
+  },
+  "author": "Helen Ng",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nhlhelen/Simple-chat-app-with-Flutter-Node-Js/issues"
+  },
+  "homepage": "https://github.com/nhlhelen/Simple-chat-app-with-Flutter-Node-Js#readme",
+  "dependencies": {
+    "express": "^4.18.1",
+    "ws": "^8.8.1"
+  }
+}
