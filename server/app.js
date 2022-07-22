@@ -1,32 +1,29 @@
-const app = require('express');
-const { WebSocketServer } = require('ws');
+const httpServer = require('http').createServer()
+const socketIO = require('socket.io')(httpServer)
 
-// Define port for http
-const PORT = process.env.PORT || 3000;
+socketIO.on('connection', function (client) {
+    console.log('Connected...', client.id);
 
-const server = app().listen(PORT, ()=> {
-    console.log(`Server listening on ${PORT}`)
-});
+    //listens for new messages coming in
+    client.on('message', function name(data) {
+        console.log(data);
+        socketIO.emit('message', data);
+    })
 
-const webSocketServer = new WebSocketServer({server});
+    //listens when a user is disconnected from the server
+    client.on('disconnect', function () {
+        console.log('Disconnected...', client.id);
+    })
 
-var sockets = {};
+    //listens when there's an error detected and logs the error on the console
+    client.on('error', function (err) {
+        console.log('Error detected', client.id);
+        console.log(err);
+    })
+})
 
-webSocketServer.on('connection', (webSocket, req) =>{
-    var userID = req.url.substr(1);
-    sockets[userID] = webSocket;
-    console.log('User connected:', userID);
-
-    webSocket.on('message', message => {
-        var datastring = message.toString();
-        if(datastring.charAt(0) == "{"){ // Check if message starts with '{' to check if it's json
-            datastring = datastring.replace(/\'/g, '"');
-            var data = JSON.parse(datastring)
-            if(data.auth == "chatappauthkey231r4"){
-                var boardws = webSockets[data.userid]; // Send to connected user
-                var msg = "{'cmd':'message','msg':'"+data.msg+"','from':'"+data.from+"'}";
-                boardws.send(msg)
-            }
-        }
-    });
+var port = process.env.PORT || 3000;
+httpServer.listen(port, function (err) {
+    if (err) console.log(err);
+    console.log('Listening on port', port);
 });
